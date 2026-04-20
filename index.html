@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acesso</title>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<style>
+body{
+background:#0d0d0d;
+color:white;
+font-family:Arial;
+text-align:center;
+margin:0;
+overflow:hidden;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+.container{
+max-width:400px;
+margin:auto;
+margin-top:50px;
+}
+
+.card{
+background:#1a1a1a;
+padding:15px;
+border-radius:15px;
+margin:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.btn{
+background:#333;
+border:none;
+color:white;
+padding:8px 12px;
+border-radius:10px;
+}
+
+.blocked{opacity:0.4;}
+.done{background:#2ecc71;}
+
+.unlock{
+margin-top:20px;
+padding:12px;
+width:100%;
+border:none;
+border-radius:10px;
+background:#2ecc71;
+display:none;
+}
+
+#msg{
+display:none;
+background:#ff4d4d;
+padding:10px;
+border-radius:10px;
+margin:10px;
+}
+
+.captcha{
+margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="container">
+
+<h2>Complete as etapas</h2>
+<p id="status">Etapa 1 de 3</p>
+
+<div id="msg"></div>
+
+<div class="card">
+<span>Inscreva-se no canal</span>
+<button class="btn" onclick="start(0)">Iniciar</button>
+</div>
+
+<div class="card">
+<span>Da like no vídeo</span>
+<button class="btn blocked" onclick="start(1)">Iniciar</button>
+</div>
+
+<div class="card">
+<span>Entre no Discord</span>
+<button class="btn blocked" onclick="start(2)">Iniciar</button>
+</div>
+
+<!-- CAPTCHA -->
+<div class="captcha">
+<div class="cf-turnstile" data-sitekey="SUA_SITE_KEY" data-callback="captchaOk"></div>
+</div>
+
+<button class="unlock" id="unlock" disabled>Acessar conteúdo</button>
+
+</div>
+
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+<script>
+
+// PARTICULAS
+let c=document.getElementById("bg");
+let ctx=c.getContext("2d");
+c.width=innerWidth;
+c.height=innerHeight;
+
+let p=[];
+for(let i=0;i<60;i++){
+p.push({x:Math.random()*c.width,y:Math.random()*c.height});
+}
+
+function draw(){
+ctx.clearRect(0,0,c.width,c.height);
+p.forEach(e=>{
+e.y+=0.4;
+if(e.y>c.height)e.y=0;
+ctx.fillRect(e.x,e.y,2,2);
+});
+requestAnimationFrame(draw);
+}
+draw();
+
+// MENSAGEM
+function showMessage(t){
+let m=document.getElementById("msg");
+m.innerText=t;
+m.style.display="block";
+setTimeout(()=>m.style.display="none",4000);
+}
+
+// SISTEMA
+let current=0;
+let btns=document.querySelectorAll(".btn");
+
+let tempoFora=0;
+let contando=false;
+let intervalo=null;
+let captchaLiberado=false;
+
+// ANTI-SPAM
+let lastClick=0;
+
+function start(i){
+let now=Date.now();
+
+// bloqueio spam
+if(now - lastClick < 2000){
+showMessage("Espere antes de clicar novamente.");
+return;
+}
+lastClick=now;
+
+if(i!==current)return;
+
+document.getElementById("clickSound").play();
+
+btns[i].innerText="Complete a ação...";
+
+let links=[
+"https://youtube.com",
+"https://youtube.com",
+"https://discord.gg"
+];
+
+window.open(links[i],"_blank");
+
+tempoFora=0;
+contando=true;
+}
+
+// DETECÇÃO ABA
+document.addEventListener("visibilitychange",()=>{
+
+if(document.hidden && contando){
+intervalo=setInterval(()=>{
+tempoFora++;
+},1000);
+}
+
+else if(!document.hidden && contando){
+
+clearInterval(intervalo);
+
+if(tempoFora>=15){
+concluir();
+}else{
+tempoFora=0;
+contando=false;
+
+showMessage("A soma foi feita e você deve tentar novamente. Caso haja erro, recarregue a página e tente novamente.");
+btns[current].innerText="Tentar novamente";
+}
+}
+});
+
+// CONCLUIR
+function concluir(){
+contando=false;
+tempoFora=0;
+
+btns[current].innerText="Concluído";
+btns[current].classList.add("done");
+
+current++;
+
+if(btns[current]){
+btns[current].classList.remove("blocked");
+}
+
+document.getElementById("status").innerText="Etapa "+(current+1)+" de 3";
+
+checkUnlock();
+}
+
+// CAPTCHA OK
+function captchaOk(){
+captchaLiberado=true;
+checkUnlock();
+}
+
+// LIBERAR FINAL
+function checkUnlock(){
+if(current===3 && captchaLiberado){
+let u=document.getElementById("unlock");
+u.style.display="block";
+u.disabled=false;
+
+u.onclick=()=>{
+window.location.href="https://SEULINKAQUI.com";
+};
+}
+}
+
+</script>
+
+</body>
+</html>
