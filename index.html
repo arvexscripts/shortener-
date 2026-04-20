@@ -1,210 +1,193 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Acesso</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Arves</title>
+    <style>
+        body {
+            background: #0d0d0d;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow-x: hidden;
+            margin: 0;
+        }
 
-<style>
-body {
-    background: #0d0d0d;
-    color: white;
-    font-family: Arial;
-    text-align: center;
-    overflow-x: hidden;
-}
+        canvas {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: -1;
+        }
 
-/* PARTICULAS */
-canvas {
-    position: fixed;
-    top:0;
-    left:0;
-    z-index:-1;
-}
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-.container {
-    max-width: 400px;
-    margin: auto;
-    margin-top: 20px; 
-}
+        /* LOGO - Tamanho aumentado e otimizado */
+        .logo-site {
+            width: 100%;
+            max-width: 380px; 
+            height: auto;
+            margin-bottom: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-/* ESTILO DA LOGO - AJUSTADO PARA NÃO FICAR GIGANTE */
-.logo-site {
-    width: 90%; /* Ocupa quase toda a largura do container em telas pequenas */
-    max-width: 350px; /* Limite máximo para não ficar enorme no PC */
-    height: auto;
-    margin-bottom: 30px; /* Espaço entre a logo e o texto */
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
+        .card {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.card {
-    background: #1a1a1a;
-    padding: 15px;
-    border-radius: 15px;
-    margin: 10px 0;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+        .btn {
+            background: #333;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-.btn {
-    background:#333;
-    border:none;
-    color:white;
-    padding:8px 12px;
-    border-radius:10px;
-    cursor: pointer;
-}
+        .blocked { opacity: 0.4; cursor: not-allowed; }
+        .done { background: #2ecc71; }
 
-.blocked {
-    opacity:0.4;
-    cursor: not-allowed;
-}
+        .unlock {
+            margin-top: 20px;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            background: #2ecc71;
+            display: none;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
 
-.done {
-    background:#2ecc71;
-}
-
-.unlock {
-    margin-top:20px;
-    padding:12px;
-    width:100%;
-    border:none;
-    border-radius:10px;
-    background:#2ecc71;
-    display:none;
-    cursor: pointer;
-    color: white;
-    font-weight: bold;
-}
-
-/* LOADING */
-.loader {
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:#000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:20px;
-    z-index: 100;
-}
-</style>
+        .loader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            z-index: 100;
+        }
+    </style>
 </head>
-
 <body>
 
 <canvas id="bg"></canvas>
-
 <div class="loader" id="loader">Carregando...</div>
 
 <div class="container" id="main" style="display:none;">
+    <img src="https://i.ibb.co/HfZSR933/1000027911-removebg-preview.png" alt="Logo" class="logo-site">
+    
+    <h2>Complete as etapas</h2>
+    <p id="status">Etapa 1 de 3</p>
 
-<img src="https://ibb.co/LXKFBsHH" alt="Logo" class="logo-site">
+    <div class="card">
+        <span>🎬 Inscreva-se</span>
+        <button class="btn" onclick="start(0, 'https://youtube.com/@mikepizda')">Iniciar</button>
+    </div>
 
-<h2>Complete as etapas</h2>
-<p id="status">Etapa 1 de 3</p>
+    <div class="card">
+        <span>👍 Deixe o Like</span>
+        <button class="btn blocked" onclick="start(1, 'https://youtu.be/FumbPNRKTs8')">Iniciar</button>
+    </div>
 
-<div class="card">
-<span><img src="https://img.icons8.com/ios_filled/512/FFFFFF/youtube-play.png" width="20"> Inscreva-se no canal</span>
-<button class="btn" onclick="start(0, 'https://youtube.com/@mikepizda?si=mLNy3ovNJ3b153eQ')">Iniciar</button>
-</div>
+    <div class="card">
+        <span>💬 Discord</span>
+        <button class="btn blocked" onclick="start(2, 'https://discord.gg/gNTudvZxB')">Iniciar</button>
+    </div>
 
-<div class="card">
-<span><img src="https://img.icons8.com/ios_filled/512/FFFFFF/youtube-play.png" width="20"> Da like no vídeo</span>
-<button class="btn blocked" onclick="start(1, 'https://youtu.be/FumbPNRKTs8?si=6Lsi_952l_Q9u4n8')">Iniciar</button>
-</div>
-
-<div class="card">
-<span><img src="https://static.vecteezy.com/system/resources/thumbnails/065/386/541/small_2x/discord-white-icon-logo-app-transparent-background-premium-social-media-design-for-digital-download-free-png.png" width="20"> Entre no Discord</span>
-<button class="btn blocked" onclick="start(2, 'https://discord.gg/gNTudvZxB')">Iniciar</button>
-</div>
-
-<button class="unlock" id="unlock">Acessar conteúdo</button>
-
+    <button class="unlock" id="unlock">Acessar conteúdo</button>
 </div>
 
 <audio id="clickSound" src="universfield-computer-mouse-click-352734.mp3"></audio>
 
 <script>
-// LOADING FAKE
-setTimeout(()=>{
-    document.getElementById("loader").style.display="none";
-    document.getElementById("main").style.display="block";
-},2000);
+    // Início do site
+    setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("main").style.display = "block";
+    }, 2000);
 
-// PARTICULAS
-let c=document.getElementById("bg");
-let ctx=c.getContext("2d");
-c.width=window.innerWidth;
-c.height=window.innerHeight;
+    // Fundo Animado
+    const c = document.getElementById("bg");
+    const ctx = c.getContext("2d");
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+    let particles = Array.from({ length: 80 }, () => ({
+        x: Math.random() * c.width,
+        y: Math.random() * c.height,
+        vx: 0.5, vy: 0.5
+    }));
 
-let particles=[];
-for(let i=0;i<80;i++){
-particles.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:0.5,vy:0.5});
-}
+    function draw() {
+        ctx.clearRect(0, 0, c.width, c.height);
+        particles.forEach(p => {
+            p.x = (p.x + p.vx) % c.width;
+            p.y = (p.y + p.vy) % c.height;
+            ctx.fillStyle = "white";
+            ctx.fillRect(p.x, p.y, 2, 2);
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
 
-function draw(){
-ctx.clearRect(0,0,c.width,c.height);
-particles.forEach(p=>{
-p.x+=p.vx;
-p.y+=p.vy;
-if(p.x>c.width)p.x=0;
-if(p.y>c.height)p.y=0;
-ctx.fillStyle="white";
-ctx.fillRect(p.x,p.y,2,2);
-});
-requestAnimationFrame(draw);
-}
-draw();
+    // Lógica do Sistema
+    let current = 0;
+    const btns = document.querySelectorAll(".btn");
 
-// SISTEMA
-let current=0;
-let btns=document.querySelectorAll(".btn");
+    function start(i, url) {
+        if (i !== current) return;
 
-function start(i, url){
-if(i!==current)return;
+        document.getElementById("clickSound").play();
+        window.open(url, '_blank');
 
-document.getElementById("clickSound").play();
-window.open(url, '_blank');
+        let time = 15;
+        btns[i].innerText = `Aguarde ${time}s`;
 
-btns[i].innerText="Aguarde 15s...";
-let time=15;
+        const interval = setInterval(() => {
+            time--;
+            btns[i].innerText = `Aguarde ${time}s`;
 
-let interval=setInterval(()=>{
-time--;
-btns[i].innerText="Aguarde "+time+"s";
+            if (time <= 0) {
+                clearInterval(interval);
+                btns[i].innerText = "Concluído";
+                btns[i].classList.add("done");
+                current++;
 
-if(time<=0){
-clearInterval(interval);
-btns[i].innerText="Concluído";
-btns[i].classList.add("done");
+                if (btns[current]) btns[current].classList.remove("blocked");
 
-current++;
+                const etapaVisual = current >= 3 ? 3 : current + 1;
+                document.getElementById("status").innerText = `Etapa ${etapaVisual} de 3`;
 
-if(btns[current]){
-btns[current].classList.remove("blocked");
-}
-
-let etapaVisual = (current >= 3) ? 3 : (current + 1);
-document.getElementById("status").innerText="Etapa "+ etapaVisual +" de 3";
-
-if(current===3){
-document.getElementById("unlock").style.display="block";
-document.getElementById("unlock").onclick=()=>{
-    document.getElementById("clickSound").play();
-    window.location.href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmJuwmJO4XxIo3M4uLtrGy5w4QjpmgX7iCodbyz6EEsjPKmBtmvJVmG7fS&s=10";
-};
-}
-}
-},1000);
-}
+                if (current === 3) {
+                    const unlockBtn = document.getElementById("unlock");
+                    unlockBtn.style.display = "block";
+                    unlockBtn.onclick = () => {
+                        document.getElementById("clickSound").play();
+                        window.location.href = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmJuwmJO4XxIo3M4uLtrGy5w4QjpmgX7iCodbyz6EEsjPKmBtmvJVmG7fS&s=10";
+                    };
+                }
+            }
+        }, 1000);
+    }
 </script>
-
 </body>
 </html>
+
