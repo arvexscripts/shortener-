@@ -110,7 +110,7 @@ canvas {
 
 </div>
 
-<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+<audio id="clickSound" src="universfield-computer-mouse-click-352734.mp3"></audio>
 
 <script>
 // LOADING FAKE
@@ -151,6 +151,7 @@ let btns=document.querySelectorAll(".btn");
 function start(i){
 if(i!==current)return;
 
+// Tocar o som ao clicar
 document.getElementById("clickSound").play();
 
 btns[i].innerText="Aguarde 15s...";
@@ -171,8 +172,7 @@ if(btns[current]){
 btns[current].classList.remove("blocked");
 }
 
-// AJUSTE REALIZADO AQUI:
-// Se current for 3, ele trava em 3. Se for menor, mostra o próximo número.
+// Trava o contador visual em 3 de 3
 let etapaExibida = (current >= 3) ? 3 : (current + 1);
 document.getElementById("status").innerText="Etapa "+ etapaExibida +" de 3";
 
@@ -189,4 +189,3 @@ window.location.href="https://SEULINKAQUI.com";
 
 </body>
 </html>
-
