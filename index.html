@@ -1,65 +1,3 @@
-<!DOCTYPE html><html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Etapas</title><style>
-body{
-    background:#0f0f0f;
-    color:white;
-    font-family:Arial;
-    text-align:center;
-    padding:20px;
-}
-
-h1{
-    margin-bottom:5px;
-}
-
-#status{
-    margin-bottom:20px;
-    opacity:0.7;
-}
-
-.btn{
-    display:block;
-    width:90%;
-    max-width:300px;
-    margin:10px auto;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    background:#1f1f1f;
-    color:white;
-    font-size:16px;
-}
-
-.blocked{
-    opacity:0.4;
-}
-
-.done{
-    background:#2ecc71;
-}
-
-#unlock{
-    display:none;
-    margin-top:20px;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    background:#3498db;
-    color:white;
-    font-size:16px;
-}
-</style></head><body><h1>Complete as etapas</h1>
-<p id="status">Etapa 1 de 3</p><button class="btn" onclick="start(0)">Inscreva-se no canal</button>
-<button class="btn blocked" onclick="start(1)">Dá like no vídeo</button>
-<button class="btn blocked" onclick="start(2)">Entre no Discord</button>
-
-<button id="unlock">Continuar</button>
-
-<audio id="clickSound" src=""></audio>
-
 <script>
 let current = 0;
 let btns = document.querySelectorAll(".btn");
@@ -79,7 +17,10 @@ function start(i){
 
         if(tempo <= 0){
             clearInterval(intervalo);
+
+            // FORÇA concluir sem verificar nada
             concluir();
+
             rodando = false;
         }
     }, 1000);
@@ -95,16 +36,20 @@ function concluir(){
         btns[current].classList.remove("blocked");
     }
 
-    document.getElementById("status").innerText = "Etapa " + (current+1) + " de 3";
+    let status = document.getElementById("status");
+    if(status){
+        status.innerText = "Etapa " + (current+1) + " de 3";
+    }
 
     if(current === 3){
         let u = document.getElementById("unlock");
-        u.style.display = "block";
+        if(u){
+            u.style.display = "block";
 
-        u.onclick = () => {
-            window.location.href = "https://SEULINKAQUI.com";
-        };
+            u.onclick = () => {
+                window.location.href = "https://SEULINKAQUI.com";
+            };
+        }
     }
 }
-</script></body>
-</html>
+</script>
