@@ -26,7 +26,7 @@
             padding: 0 20px;
         }
 
-        /* LOGO - Tamanho aumentado e otimizado */
+        /* LOGO - Tamanho ideal solicitado */
         .logo-site {
             width: 100%;
             max-width: 380px; 
@@ -45,6 +45,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .card span {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .btn {
@@ -99,17 +105,17 @@
     <p id="status">Etapa 1 de 3</p>
 
     <div class="card">
-        <span>🎬 Inscreva-se</span>
-        <button class="btn" onclick="start(0, 'https://youtube.com/@mikepizda')">Iniciar</button>
+        <span><img src="https://img.icons8.com/ios_filled/512/FFFFFF/youtube-play.png" width="20"> Inscreva-se no canal</span>
+        <button class="btn" onclick="start(0, 'https://youtube.com/@mikepizda?si=mLNy3ovNJ3b153eQ')">Iniciar</button>
     </div>
 
     <div class="card">
-        <span>👍 Deixe o Like</span>
-        <button class="btn blocked" onclick="start(1, 'https://youtu.be/FumbPNRKTs8')">Iniciar</button>
+        <span><img src="https://img.icons8.com/ios_filled/512/FFFFFF/youtube-play.png" width="20"> Da like no vídeo</span>
+        <button class="btn blocked" onclick="start(1, 'https://youtu.be/FumbPNRKTs8?si=6Lsi_952l_Q9u4n8')">Iniciar</button>
     </div>
 
     <div class="card">
-        <span>💬 Discord</span>
+        <span><img src="https://static.vecteezy.com/system/resources/thumbnails/065/386/541/small_2x/discord-white-icon-logo-app-transparent-background-premium-social-media-design-for-digital-download-free-png.png" width="20"> Entre no Discord</span>
         <button class="btn blocked" onclick="start(2, 'https://discord.gg/gNTudvZxB')">Iniciar</button>
     </div>
 
@@ -119,13 +125,13 @@
 <audio id="clickSound" src="universfield-computer-mouse-click-352734.mp3"></audio>
 
 <script>
-    // Início do site
+    // Carregamento Fake
     setTimeout(() => {
         document.getElementById("loader").style.display = "none";
         document.getElementById("main").style.display = "block";
     }, 2000);
 
-    // Fundo Animado
+    // Fundo de Partículas
     const c = document.getElementById("bg");
     const ctx = c.getContext("2d");
     c.width = window.innerWidth;
@@ -148,13 +154,14 @@
     }
     draw();
 
-    // Lógica do Sistema
+    // Lógica do Sistema de Etapas
     let current = 0;
     const btns = document.querySelectorAll(".btn");
 
     function start(i, url) {
         if (i !== current) return;
 
+        // Tocar som do clique
         document.getElementById("clickSound").play();
         window.open(url, '_blank');
 
@@ -173,6 +180,7 @@
 
                 if (btns[current]) btns[current].classList.remove("blocked");
 
+                // Trava o contador em 3 de 3
                 const etapaVisual = current >= 3 ? 3 : current + 1;
                 document.getElementById("status").innerText = `Etapa ${etapaVisual} de 3`;
 
