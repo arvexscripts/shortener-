@@ -11,7 +11,7 @@ body {
     color: white;
     font-family: Arial;
     text-align: center;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 /* PARTICULAS */
@@ -25,7 +25,17 @@ canvas {
 .container {
     max-width: 400px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 30px; 
+}
+
+/* ESTILO DA LOGO */
+.logo-site {
+    max-width: 220px; /* Tamanho da sua logo */
+    height: auto;
+    margin-bottom: 35px; /* Espaço entre a logo e as etapas (divisória) */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card {
@@ -81,6 +91,7 @@ canvas {
     justify-content:center;
     align-items:center;
     font-size:20px;
+    z-index: 100;
 }
 </style>
 </head>
@@ -92,6 +103,8 @@ canvas {
 <div class="loader" id="loader">Carregando...</div>
 
 <div class="container" id="main" style="display:none;">
+
+<img src="https://unsightly-purple-vtijm6picw.edgeone.app/1000027907-removebg-preview.png" alt="Logo" class="logo-site">
 
 <h2>Complete as etapas</h2>
 <p id="status">Etapa 1 de 3</p>
@@ -156,10 +169,8 @@ let btns=document.querySelectorAll(".btn");
 function start(i, url){
 if(i!==current)return;
 
-// Tocar o som do clique
+// Tocar som do clique e abrir link
 document.getElementById("clickSound").play();
-
-// Abrir o link da etapa em uma nova aba
 window.open(url, '_blank');
 
 btns[i].innerText="Aguarde 15s...";
@@ -180,14 +191,13 @@ if(btns[current]){
 btns[current].classList.remove("blocked");
 }
 
-// Correção para não exibir "Etapa 4 de 3"
+// Trava em 3 de 3 para não aparecer o 4
 let etapaVisual = (current >= 3) ? 3 : (current + 1);
 document.getElementById("status").innerText="Etapa "+ etapaVisual +" de 3";
 
 if(current===3){
 document.getElementById("unlock").style.display="block";
 document.getElementById("unlock").onclick=()=>{
-    // Tocar som ao clicar no botão final também
     document.getElementById("clickSound").play();
     window.location.href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmJuwmJO4XxIo3M4uLtrGy5w4QjpmgX7iCodbyz6EEsjPKmBtmvJVmG7fS&s=10";
 };
@@ -199,4 +209,3 @@ document.getElementById("unlock").onclick=()=>{
 
 </body>
 </html>
-
