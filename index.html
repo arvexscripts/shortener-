@@ -171,7 +171,10 @@ if(btns[current]){
 btns[current].classList.remove("blocked");
 }
 
-document.getElementById("status").innerText="Etapa "+(current+1)+" de 3";
+// AJUSTE REALIZADO AQUI:
+// Se current for 3, ele trava em 3. Se for menor, mostra o próximo número.
+let etapaExibida = (current >= 3) ? 3 : (current + 1);
+document.getElementById("status").innerText="Etapa "+ etapaExibida +" de 3";
 
 if(current===3){
 document.getElementById("unlock").style.display="block";
@@ -186,3 +189,4 @@ window.location.href="https://SEULINKAQUI.com";
 
 </body>
 </html>
+
