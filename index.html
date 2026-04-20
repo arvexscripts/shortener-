@@ -1,56 +1,188 @@
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acesso</title>
 
-let current = 0;
-let btns = document.querySelectorAll(".btn");
-let rodando = false;
+<style>
+body {
+    background: #0d0d0d;
+    color: white;
+    font-family: Arial;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* PARTICULAS */
+canvas {
+    position: fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+.container {
+    max-width: 400px;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.card {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 15px;
+    margin: 10px 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.btn {
+    background:#333;
+    border:none;
+    color:white;
+    padding:8px 12px;
+    border-radius:10px;
+}
+
+.blocked {
+    opacity:0.4;
+}
+
+.done {
+    background:#2ecc71;
+}
+
+.unlock {
+    margin-top:20px;
+    padding:12px;
+    width:100%;
+    border:none;
+    border-radius:10px;
+    background:#2ecc71;
+    display:none;
+}
+
+/* LOADING */
+.loader {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="loader" id="loader">Carregando...</div>
+
+<div class="container" id="main" style="display:none;">
+
+<h2>Complete as etapas</h2>
+<p id="status">Etapa 1 de 3</p>
+
+<div class="card">
+<span><img src="https://img.icons8.com/ios_filled/512/FFFFFF/youtube-play.png" width="20"> Inscreva-se no canal</span>
+<button class="btn" onclick="start(0)">Iniciar</button>
+</div>
+
+<div class="card">
+<span><img src="https://img.icons8.com/ios_filled/512/FFFFFF/youtube-play.png" width="20"> Da like no vídeo</span>
+<button class="btn blocked" onclick="start(1)">Iniciar</button>
+</div>
+
+<div class="card">
+<span><img src="https://static.vecteezy.com/system/resources/thumbnails/065/386/541/small_2x/discord-white-icon-logo-app-transparent-background-premium-social-media-design-for-digital-download-free-png.png" width="20"> Entre no Discord</span>
+<button class="btn blocked" onclick="start(2)">Iniciar</button>
+</div>
+
+<button class="unlock" id="unlock">Acessar conteúdo</button>
+
+</div>
+
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+<script>
+// LOADING FAKE
+setTimeout(()=>{
+    document.getElementById("loader").style.display="none";
+    document.getElementById("main").style.display="block";
+},2000);
+
+// PARTICULAS
+let c=document.getElementById("bg");
+let ctx=c.getContext("2d");
+c.width=window.innerWidth;
+c.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<80;i++){
+particles.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:0.5,vy:0.5});
+}
+
+function draw(){
+ctx.clearRect(0,0,c.width,c.height);
+particles.forEach(p=>{
+p.x+=p.vx;
+p.y+=p.vy;
+if(p.x>c.width)p.x=0;
+if(p.y>c.height)p.y=0;
+ctx.fillStyle="white";
+ctx.fillRect(p.x,p.y,2,2);
+});
+requestAnimationFrame(draw);
+}
+draw();
+
+// SISTEMA
+let current=0;
+let btns=document.querySelectorAll(".btn");
 
 function start(i){
-    if(i !== current || rodando) return;
+if(i!==current)return;
 
-    rodando = true;
+document.getElementById("clickSound").play();
 
-    let tempo = 15;
-    btns[i].innerText = "Aguarde " + tempo + "s";
+btns[i].innerText="Aguarde 15s...";
+let time=15;
 
-    let intervalo = setInterval(() => {
-        tempo--;
-        btns[i].innerText = "Aguarde " + tempo + "s";
+let interval=setInterval(()=>{
+time--;
+btns[i].innerText="Aguarde "+time+"s";
 
-        if(tempo <= 0){
-            clearInterval(intervalo);
-            concluir();
-            rodando = false;
-        }
-    }, 1000);
+if(time<=0){
+clearInterval(interval);
+btns[i].innerText="Concluído";
+btns[i].classList.add("done");
+
+current++;
+
+if(btns[current]){
+btns[current].classList.remove("blocked");
 }
 
-function concluir(){
-    btns[current].innerText = "Concluído";
-    btns[current].classList.add("done");
+document.getElementById("status").innerText="Etapa "+(current+1)+" de 3";
 
-    current++;
-
-    if(btns[current]){
-        btns[current].classList.remove("blocked");
-    }
-
-    let status = document.getElementById("status");
-    if(status){
-        status.innerText = "Etapa " + (current+1) + " de 3";
-    }
-
-    if(current === 3){
-        let u = document.getElementById("unlock");
-        if(u){
-            u.style.display = "block";
-
-            u.onclick = () => {
-                window.location.href = "https://SEULINKAQUI.com";
-            };
-        }
-    }
+if(current===3){
+document.getElementById("unlock").style.display="block";
+document.getElementById("unlock").onclick=()=>{
+window.location.href="https://SEULINKAQUI.com";
+};
 }
-
-});
+}
+},1000);
+}
 </script>
+
+</body>
+</html>
