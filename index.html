@@ -44,10 +44,12 @@ canvas {
     color:white;
     padding:8px 12px;
     border-radius:10px;
+    cursor: pointer;
 }
 
 .blocked {
     opacity:0.4;
+    cursor: not-allowed;
 }
 
 .done {
@@ -62,6 +64,9 @@ canvas {
     border-radius:10px;
     background:#2ecc71;
     display:none;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
 }
 
 /* LOADING */
@@ -93,17 +98,17 @@ canvas {
 
 <div class="card">
 <span><img src="https://img.icons8.com/ios_filled/512/FFFFFF/youtube-play.png" width="20"> Inscreva-se no canal</span>
-<button class="btn" onclick="start(0)">Iniciar</button>
+<button class="btn" onclick="start(0, 'https://youtube.com/@mikepizda?si=mLNy3ovNJ3b153eQ')">Iniciar</button>
 </div>
 
 <div class="card">
 <span><img src="https://img.icons8.com/ios_filled/512/FFFFFF/youtube-play.png" width="20"> Da like no vídeo</span>
-<button class="btn blocked" onclick="start(1)">Iniciar</button>
+<button class="btn blocked" onclick="start(1, 'https://youtu.be/FumbPNRKTs8?si=6Lsi_952l_Q9u4n8')">Iniciar</button>
 </div>
 
 <div class="card">
 <span><img src="https://static.vecteezy.com/system/resources/thumbnails/065/386/541/small_2x/discord-white-icon-logo-app-transparent-background-premium-social-media-design-for-digital-download-free-png.png" width="20"> Entre no Discord</span>
-<button class="btn blocked" onclick="start(2)">Iniciar</button>
+<button class="btn blocked" onclick="start(2, 'https://discord.gg/gNTudvZxB')">Iniciar</button>
 </div>
 
 <button class="unlock" id="unlock">Acessar conteúdo</button>
@@ -148,11 +153,14 @@ draw();
 let current=0;
 let btns=document.querySelectorAll(".btn");
 
-function start(i){
+function start(i, url){
 if(i!==current)return;
 
-// Tocar o som ao clicar
+// Tocar o som do clique
 document.getElementById("clickSound").play();
+
+// Abrir o link da etapa em uma nova aba
+window.open(url, '_blank');
 
 btns[i].innerText="Aguarde 15s...";
 let time=15;
@@ -172,14 +180,16 @@ if(btns[current]){
 btns[current].classList.remove("blocked");
 }
 
-// Trava o contador visual em 3 de 3
-let etapaExibida = (current >= 3) ? 3 : (current + 1);
-document.getElementById("status").innerText="Etapa "+ etapaExibida +" de 3";
+// Correção para não exibir "Etapa 4 de 3"
+let etapaVisual = (current >= 3) ? 3 : (current + 1);
+document.getElementById("status").innerText="Etapa "+ etapaVisual +" de 3";
 
 if(current===3){
 document.getElementById("unlock").style.display="block";
 document.getElementById("unlock").onclick=()=>{
-window.location.href="https://SEULINKAQUI.com";
+    // Tocar som ao clicar no botão final também
+    document.getElementById("clickSound").play();
+    window.location.href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmJuwmJO4XxIo3M4uLtrGy5w4QjpmgX7iCodbyz6EEsjPKmBtmvJVmG7fS&s=10";
 };
 }
 }
@@ -189,3 +199,4 @@ window.location.href="https://SEULINKAQUI.com";
 
 </body>
 </html>
+
