@@ -1,4 +1,6 @@
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+
 let current = 0;
 let btns = document.querySelectorAll(".btn");
 let rodando = false;
@@ -17,10 +19,7 @@ function start(i){
 
         if(tempo <= 0){
             clearInterval(intervalo);
-
-            // FORÇA concluir sem verificar nada
             concluir();
-
             rodando = false;
         }
     }, 1000);
@@ -52,4 +51,6 @@ function concluir(){
         }
     }
 }
+
+});
 </script>
